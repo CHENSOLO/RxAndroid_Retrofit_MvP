@@ -10,9 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.chensolo.rxandroid_retrofit_mvp.view.ItemDecoration;
 import com.example.chensolo.rxandroid_retrofit_mvp.view.MainView;
 import com.jakewharton.rxbinding.view.RxView;
 
@@ -63,7 +65,7 @@ public class MainActivity extends BaseActivity implements MainView{
         mMainPresenter = new MainPresenterImpl(this);
         mMainPresenter.onCreate();
 
-        mMainPresenter.getPlaceAndWeatherData("北京");
+        mMainPresenter.getWeatherData("北京");
         RxView.clicks(mFloatingActionBar).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -110,9 +112,17 @@ public class MainActivity extends BaseActivity implements MainView{
         mPlaceAdapter = new PlaceAdapter();
 
         mRvPlace.setAdapter(mWeatherDataAdapter);
+        mPlaceAdapter.setmOnPlaceClickListener(new PlaceAdapter.OnPlaceClickListener() {
+            @Override
+            public void onClick(View view, Place place) {
+                mMainPresenter.getWeatherData(place.getName());
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+       mRvPlace.setAdapter(mPlaceAdapter);
 
-
-
+       mRvWeatherData.setHasFixedSize(true);
+       mRvWeatherData.addItemDecoration(new ItemDecoration(this));
     }
 
     @Override

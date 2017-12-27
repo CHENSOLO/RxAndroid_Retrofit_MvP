@@ -5,7 +5,7 @@ package presenter;
  */
 
 public interface MainPresenter extends  BasePresenter {
-    void getPlaceAndWeatherData(String 北京);
+    void getWeatherData(String 北京);
 
     void onRefresh();
 }
